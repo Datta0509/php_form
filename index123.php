@@ -1,5 +1,36 @@
 <?php
 session_start();
+
+$name = $mail = $pwd = "";
+$name_error = $mail_error = $pwd_error = "";
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+  if(empty($_POST['name'])){
+    $name_error = "Please enter the username";
+  }
+  else{
+    $name = test_input($_POST['name']);
+    if(!preg_match("/^[a-zA-Z-']+$/",$name)){
+      $name_error = "Name should contain only letters and white spaces";
+    }
+
+  }
+}
+  
+  if(empty($_POST['mail'])){
+    $mail_error  = "Please enter email address";
+  }
+  if(empty($_POST['pwd'])){
+    $pwd_error = "Please enter password";
+  }
+
+  function test_input($data){
+    $data = trim($data);
+    $data = htmlspecialchars($data);
+    $data = stripslashes($data);
+    return $data ; 
+  }
+
 ?>
 
 <!doctype html>
@@ -24,14 +55,17 @@ session_start();
             <div class="mb-3">
                 <label class="form-label">Name</label>
                 <input type="text" class="form-control" name="name" />
+                <span><?php echo $name_error; ?></span>
             </div>
             <div class="mb-3">
               <label for="exampleInputEmail1" class="form-label">Email address</label>
               <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="mail"/>
+              <span><?php echo $mail_error; ?></span>
             </div>
             <div class="mb-3">
               <label for="exampleInputPassword1" class="form-label">Password</label>
               <input type="password" class="form-control" id="exampleInputPassword1" name="pwd" />
+              <span> <?php echo $pwd_error;  ?> </span>
             </div>
             
             <button type="submit" class="btn btn-primary">Submit</button>
